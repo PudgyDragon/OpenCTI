@@ -7,9 +7,9 @@
   <tbody>
     <tr>
       <td>
-        <a href="#">Installation</a>
+        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/installation.md">Installation Guide</a>
       </td>
-      <td>Coming Soon</td>
+      <td>Semi-comprehensive guide on getting OpenCTI fully operational on a RHEL 9 server.</td>
     </tr>
   </tbody>
 </table>
