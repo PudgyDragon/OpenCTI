@@ -2,7 +2,7 @@
 <p>As the title suggests, this is a guide for installing OpenCTI. The underlying OS for this install will be RHEL 9. 
 I will cover a basic partition setup for this. Your organization may have a different setup. This guide 
 also assumes that you are behind a corporate proxy. It took some trial and error to get it working, 
-hopefully it will work for you too. I had a hard time finding guides for installing OpenCTI behind a proxy.</p>
+hopefully it will work for you too. I had a hard time finding guides for installing OpenCTI behind a proxy. Becuase I'm terrible, unless specified (as in the OpenCTI installation section) these commands are going to be run as root (or prepend sudo to the command if you're better than me).</p>
 
 <h2>Requirements</h2>
 <p>OpenCTI requirements will vary based on your needs. You can find an overview at this URL </p>
@@ -252,4 +252,132 @@ the following URL</p>
   <li>https://benheater.com/proxmox-running-opencti/</li>
 </ul>
 
-<p>ACTUAL INSTALLATION COMING SOON, HOPEFULLY TOMORROW. RAN OUT OF TIME.</p>
+<h3>Dependencies</h3>
+<p>Install a couple dependencies that OpenCTI needs, and change the max map count that it requires you to change</p>
+<pre><code>
+  dnf install git
+  dnf install jq
+  sysctl -w vm.max_map_count=1048575
+  echo 'vm.max_map_count=1048575' | sudo tee --append /etc/sysctl.conf
+  
+</code></pre>
+
+<h3>OpenCTI Service Account</h3>
+<p>Make the directory your app will be in and create a service account that will be used for making changes to OpenCTI. Make its home directory the location that your app will be in. I named mine OpenCTI and placed it in the /opt directory, but you can do whatever you want</p>
+<pre><code>
+  mkdir /opt/OpenCTI
+  useradd -r -s /bin/bash -m -d /opt/OpenCTI opencti_svc
+  passwd opencti_svc
+  usermod -a -G docker opencti_svc
+  
+</code></pre>
+<p>In another terminal, login as your opencti_svc account.</p>
+
+<h3>Clone Repo</h3>
+<p>Change directories into your newly created OpenCTI directory and clone the repo. Once there, make a backup of it just in case one of us screws something up along the way</p>
+<pre><code>
+  cd /opt/OpenCTI
+  git clone https://github.com/OpenCTI-Platform/docker.git
+  cd docker
+  cp docker-compose.yml docker-compose.yml.bak
+  
+</code></pre>
+
+<h3>Configurations</h3>
+<p>Start off the bat with HTTPS in mind. By default, OpenCTI uses port 8080. For one reason or another, you may not want to use 8080 as your port. The internal application will need to continue using 8080, but it can be mapped to 443 for external communication</p>
+<pre><code>
+  vim docker-compose.yml
+      Change the setting in the opencti section for ports from
+          {opencti_port}:8080
+      to
+          443:8080
+  
+</code></pre>
+<p>Run the following to configure OpenCTI settings. Make changes where necessary (ie email, password, base url, etc)</p>
+<pre><code>
+  (cat << EOF
+      OPENCTI_ADMIN_EMAIL=admin@fqdn
+      OPENCTI_ADMIN_PASSWORD=ChangeMePlease
+      OPENCTI_ADMIN_TOKEN=$(cat /proc/sys/kernel/random/uuid)
+      OPENCTI_BASE_URL=https:fqdn
+      OPENCTI_HEALTHCHECK_ACCESS_KEY=$(cat /proc/sys/kernel/random/uuid)
+      MINIO_ROOT_USER=$(cat /proc/sys/kernel/random/uuid)
+      MINIO_ROOT_PASSWORD=$(cat /proc/sys/kernel/random/uuid)
+      RABBITMQ_DEFAULT_USER=guest
+      RABBITMQ_DEFAULT_PASS=guest
+      ELASTIC_MEMORY_SIZE=8G
+      CONNECTOR_HISTORY_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_EXPORT_FILE_STIX_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_EXPORT_FILE_CSV_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_IMPORT_FILE_STIX_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_EXPORT_FILE_TXT_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_IMPORT_DOCUMENT_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_ANALYSIS_ID=$(cat /proc/sys/kernel/random/uuid)
+      SMTP_HOSTNAME=localhost
+      CONNECTOR_MITRE_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_IMPORT_EXTERNAL_REFERENCE_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_OPENCTI_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_IMPORT_FILE_YARA_ID=$(cat /proc/sys/kernel/random/uuid)
+      XTM_COMPOSER_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_ALIENVAULT_ID=$(cat /proc/sys/kernel/random/uuid)
+      CONNECTOR_MISP_ID=$(cat /proc/sys/kernel/random/uuid)
+      OPENCTI_EXTERNAL_SCHEME=https
+      OPENCTI_HOST=fqdn
+      OPENCTI_PORT=443
+      EOF
+  ) > .env
+    
+</code></pre>
+<p>Give it the ole up down to get these configurations going</p>
+<pre><code>
+  docker compose up -d && docker compose down
+  
+</code></pre>
+<p>Edit the docker-compose.yml file and make the following changes, followed by another up down</p>
+<pre><code>
+  vim docker-compose.yml
+      In the opencti section
+          opencti:
+              volumes:
+                  -opencti_https:/certs
+              environment:
+                  - APP__HTTPS_CERT__KEY=/certs/opencti.key
+                  - APP__HTTPS_CERT__CRT=/certs/opencti.crt
+                  - APP__HTTPS_CERT__REJECT_UNAUTHORIZED=false
+                  - HTTP_PROXY=http://fqdn:port
+                  - HTTPS_PROXY=http://fqdn:port
+                  - NO_PROXY=localhost,127.0.0.0/8,172.0.0.0/8,opencti,rabbitmq,redis,elasticsearch,minio,fqdn,IPv4
+      In the bottom volumes section
+          volumes:
+              opencti_https:
+      Any instance of http://opencti:8080
+          https://fqdn
+      Change the healthcheck for opencti to not verify SSL
+          "wget", "--no-check-certificate", "https://fqdn/health?health_access_key=${OPENCTI_HEALTHCHECK_ACCESS_KEY}"
+  docker compose up -d && docker compose down
+  
+</code></pre>
+<h4>NOTE - wget does SSL verification with the healthcheck. For testing purposes I bypassed it with the no check option.</h4>
+<p>This will set up your proxy settings for OpenCTI, and create the directory where you can put your servers SSL certificate and key for HTTPS. You will need to put your .key and .crt files in the following location and name them opencti.key and opencti.crt (or whatever you want as long as they're named the same in the docker-compose file we just changed)</p>
+<pre><code>
+  /var/lib/docker/volumes/docker_opencti_https/_data/
+  
+</code></pre>
+<p>At this point you can now start the container and you should be able to navigate to your url</p>
+<pre><code>
+  docker compose up -d
+  
+</code></pre>
+
+<h3>Extras</h3>
+<p>If your hardware has the capability and you're not worried about clustering at the moment, you can try bumping up the number of workers you have. I wouldn't do too many though. I went from 3 to 5 for testing</p>
+<pre><code>
+  vim docker-compose.yml
+      worker:
+          replicas: 5
+  
+</code></pre>
+
+<h2>Fin</h2>
+<p>There are several connectors you can use within OpenCTI. I will cover AlienVault and MISP in separate guides of their own shortly, but it's past my bed time.</p>
+
