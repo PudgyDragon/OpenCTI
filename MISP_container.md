@@ -1,9 +1,9 @@
-<h1>MISP Container for OpenCTI</h1>
-<p>Self explanatory. These are the settings I used for a MISP container that works with OpenCTI on a 
+<h1>MISP Connector for OpenCTI</h1>
+<p>Self explanatory. These are the settings I used for a MISP connector that works with OpenCTI on a 
 network behind a proxy.</p>
 
 <h2>Configurations</h2>
-<p>Before you start, make a user in OpenCTI in the GUI for your MISP container. Set it to be a connector 
+<p>Before you start, make a user in OpenCTI in the GUI for your MISP connnector. Set it to be a connector 
   account and take note of the user token. Edit your docker-compose.yml file and use this template.</p>
 <h4>NOTE: Change the OPENCTI_URL to your OpenCTI URL, and the MISP_URL the MISP instance you'll be 
   sending API calls to. The MISP_User_Token will be the user token of the connector account you just created. 
