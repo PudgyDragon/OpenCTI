@@ -10,7 +10,6 @@ network behind a proxy.</p>
 For the "import from date", choose one that isn't too far back. Your CPU will thank you.</h4>
 <pre><code>
   vim /opt/OpenCTI/docker/docker-compose.yml
-      MISP
       connector-misp:
           image: opencti/connector-misp:latest
           environment:
