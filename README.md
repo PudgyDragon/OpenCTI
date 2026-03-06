@@ -13,3 +13,15 @@
     </tr>
   </tbody>
 </table>
+<h2>Connectors</h2>
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/MISP_container.md">MISP</a>
+      </td>
+      <td>Configuration settings for a MISP connector.</td>
+    </tr>
+  </tbody>
+</table>
+
