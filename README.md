@@ -18,7 +18,7 @@
   <tbody>
     <tr>
       <td>
-        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/MISP_container.md">MISP</a>
+        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/MISP_connector.md">MISP</a>
       </td>
       <td>Configuration settings for a MISP connector.</td>
     </tr>
