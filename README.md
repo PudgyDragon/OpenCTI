@@ -20,7 +20,13 @@
       <td>
         <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/MISP_connector.md">MISP</a>
       </td>
-      <td>Configuration settings for a MISP connector.</td>
+      <td>Configuration settings for an MISP connector.</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/AlienVault_connector.md">AlienVault</a>
+      </td>
+      <td>Configuration settings for an AlienVault connector.</td>
     </tr>
   </tbody>
 </table>
