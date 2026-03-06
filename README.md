@@ -9,7 +9,7 @@
       <td>
         <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/installation.md">Installation Guide</a>
       </td>
-      <td>Semi-comprehensive guide on getting OpenCTI fully operational on a RHEL 9 server.</td>
+      <td>Semi-comprehensive guide on getting OpenCTI fully operational on a RHEL 9 server</td>
     </tr>
   </tbody>
 </table>
@@ -20,13 +20,24 @@
       <td>
         <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/MISP_connector.md">MISP</a>
       </td>
-      <td>Configuration settings for an MISP connector.</td>
+      <td>Configuration settings for an MISP connector</td>
     </tr>
     <tr>
       <td>
         <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/AlienVault_connector.md">AlienVault</a>
       </td>
-      <td>Configuration settings for an AlienVault connector.</td>
+      <td>Configuration settings for an AlienVault connector</td>
+    </tr>
+  </tbody>
+</table>
+<h2>RSS Feeds</h2>
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/RSS_feeds.md">RSS Feeds</a>
+      </td>
+      <td>A list of RSS feeds you can feed into OpenCTI for free</td>
     </tr>
   </tbody>
 </table>
