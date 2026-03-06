@@ -6,7 +6,7 @@ network behind a proxy.</p>
 <p>Before you start, make a user in OpenCTI in the GUI for your MISP connnector. Set it to be a connector 
   account and take note of the user token. Edit your docker-compose.yml file and use this template.</p>
 <h4>NOTE: Change the OPENCTI_URL to your OpenCTI URL, and the MISP_URL the MISP instance you'll be 
-  sending API calls to. The MISP_User_Token will be the user token of the connector account you just created. 
+  sending API calls to. The OPENCTI_TOKEN will be the user token of the connector account you just created. 
 For the "import from date", choose one that isn't too far back. Your CPU will thank you.</h4>
 <pre><code>
   vim /opt/OpenCTI/docker/docker-compose.yml
