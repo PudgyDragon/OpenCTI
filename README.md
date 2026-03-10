@@ -24,7 +24,7 @@
     </tr>
     <tr>
       <td>
-        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/AlienVault_connector.md">AlienVault</a>
+        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/Connectors/AlienVault_connector.md">AlienVault</a>
       </td>
       <td>Configuration settings for an AlienVault connector</td>
     </tr>
