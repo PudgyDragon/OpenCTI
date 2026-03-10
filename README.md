@@ -30,12 +30,12 @@
     </tr>
   </tbody>
 </table>
-<h2>RSS Feeds</h2>
+<h2>Feeds</h2>
 <table>
   <tbody>
     <tr>
       <td>
-        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/RSS_feeds.md">RSS Feeds</a>
+        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/Feeds/RSS_feeds.md">RSS Feeds</a>
       </td>
       <td>A list of RSS feeds you can feed into OpenCTI for free</td>
     </tr>
