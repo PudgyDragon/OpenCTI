@@ -28,6 +28,12 @@
       </td>
       <td>Configuration settings for an AlienVault connector</td>
     </tr>
+    <tr>
+      <td>
+        <a href="https://github.com/PudgyDragon/OpenCTI/blob/main/Connectors/CISA_KEV_connector.md">CISA KEV</a>
+      </td>
+      <td>Configuration settings for an CISA KEV connector</td>
+    </tr>
   </tbody>
 </table>
 <h2>Feeds</h2>
